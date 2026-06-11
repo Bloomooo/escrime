@@ -43,6 +43,24 @@ public class TournamentRankingTests
         ranking.Should().ContainInOrder(galahad, morgane, noir);
     }
 
+    // TC-019
+    [Fact]
+    [Trait("Requirement", "REQ-E-012")]
+    public void GetChampion_MultiplePlayers_ReturnsHighestScorer()
+    {
+        // Arrange
+        var galahad = MakePlayer("Sir Galahad", "Win", "Draw");        // 4 points
+        var morgane = MakePlayer("Dame Morgane", "Win", "Win", "Win"); // 14 points
+        var noir = MakePlayer("Chevalier Noir", "Win", "Win", "Draw"); // 7 points
+        var players = new List<Player> { galahad, morgane, noir };
+
+        // Act
+        var champion = _ranking.GetChampion(players);
+
+        // Assert
+        champion.Should().BeSameAs(morgane, "because 14 points is the highest score");
+    }
+
     private static Player MakePlayer(string name, params string[] results) => new()
     {
         Name = name,
