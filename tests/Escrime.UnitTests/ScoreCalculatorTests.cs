@@ -75,6 +75,21 @@ public class ScoreCalculatorTests
             .WithMessage("*cannot be null*");
     }
 
+    // TC-003
+    [Fact]
+    [Trait("Requirement", "REQ-E-002")]
+    public void CalculateScore_ThreeConsecutiveWins_Adds5PointsBonus()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Win", "Win"]);
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        score.Should().Be(14, "because 3*3 = 9 points + 5 bonus for three consecutive wins");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
