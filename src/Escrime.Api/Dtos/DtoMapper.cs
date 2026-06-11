@@ -26,4 +26,20 @@ public static class DtoMapper
             .ToList();
         return new PlayerDetailDto(dto.Id, dto.Name, dto.Score, dto.IsDisqualified, dto.PenaltyPoints, matches);
     }
+
+    public static ScoreBreakdownDto ToBreakdownDto(ScoreBreakdown breakdown)
+    {
+        var events = breakdown.Events.Select(ToEventDto).ToList();
+        return new ScoreBreakdownDto(breakdown.FinalScore, breakdown.IsDisqualified, events);
+    }
+
+    private static ScoreEventDto ToEventDto(ScoreEvent scoreEvent) => scoreEvent switch
+    {
+        MatchScoredEvent e => new ScoreEventDto("match", e.Index, e.Outcome, null, e.Points, e.RunningScore),
+        StreakBonusEvent e => new ScoreEventDto("streakBonus", null, null, e.AfterMatchIndex, e.Points, e.RunningScore),
+        PenaltyEvent e => new ScoreEventDto("penalty", null, null, null, e.Points, e.RunningScore),
+        ClampToZeroEvent e => new ScoreEventDto("clampToZero", null, null, null, null, e.RunningScore),
+        DisqualificationEvent e => new ScoreEventDto("disqualification", null, null, null, null, e.RunningScore),
+        _ => throw new InvalidOperationException($"Unknown score event: {scoreEvent.GetType().Name}.")
+    };
 }

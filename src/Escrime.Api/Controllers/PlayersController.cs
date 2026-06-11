@@ -75,16 +75,35 @@ public class PlayersController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>Déroulé du score, événement par événement, pour la reconstitution côté front.</summary>
+    [HttpGet("{id:int}/score-breakdown")]
+    [ProducesResponseType(typeof(ScoreBreakdownDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ScoreBreakdownDto>> GetScoreBreakdown(int id)
+    {
+        var entity = await FindPlayer(id);
+        if (entity is null)
+            return NotFound();
+
+        var domain = PlayerMapper.ToDomain(entity);
+        var breakdown = _calculator.CalculateBreakdown(domain.Matches, domain.IsDisqualified, domain.PenaltyPoints);
+        return DtoMapper.ToBreakdownDto(breakdown);
+    }
+
     /// <summary>Enregistre le résultat d'un combat (dans l'ordre chronologique).</summary>
     [HttpPost("{id:int}/matches")]
     [ProducesResponseType(typeof(MatchDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<MatchDto>> RecordMatch(int id, RecordMatchRequest request)
     {
         var entity = await FindPlayer(id);
         if (entity is null)
             return NotFound();
+
+        if (entity.IsDisqualified)
+            return Conflict("A disqualified player cannot fight anymore.");
 
         var match = new MatchResultEntity { PlayerId = id, Result = request.Result };
         _db.Matches.Add(match);

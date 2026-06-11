@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/cinzel';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* Tokens from arena-frontend-spec section 7; Tailwind derives the utilities. */
+@theme {
+	--color-bg: #0e0b16;
+	--color-arena: #0b0912;
+	--color-surface: #1a1526;
+	--color-surface-raised: #251d38;
+	--color-border: #2e2542;
+	--color-gold: #d4af37;
+	--color-gold-bright: #e2c25a;
+	--color-arcane: #8b5cf6;
+	--color-text: #f2ede3;
+	--color-text-muted: #a8b2c7;
+	--color-win: #3dd68c;
+	--color-draw: #f2b441;
+	--color-loss: #e5484d;
+
+	--font-display: 'Cinzel Variable', serif;
+	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+	--radius-card: 12px;
+}
+
+@layer base {
+	body {
+		background-color: var(--color-bg);
+		color: var(--color-text);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+	}
+
+	/* Spec section 9: keyboard focus visible everywhere. */
+	:focus-visible {
+		outline: 2px solid var(--color-gold);
+		outline-offset: 2px;
+	}
+
+	::selection {
+		background-color: var(--color-arcane);
+		color: var(--color-text);
+	}
+}
+
+@keyframes hero-rise {
+	from {
+		opacity: 0;
+		transform: translateY(18px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}

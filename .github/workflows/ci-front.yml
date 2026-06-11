@@ -1,0 +1,107 @@
+name: CI Front
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/ci-front.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/ci-front.yml"
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Installer les dependances
+        run: bun install --frozen-lockfile
+
+      # Le projet vitest "client" execute les tests de composants dans Chromium
+      - name: Installer Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Typecheck (svelte-check)
+        run: bun run check
+
+      - name: Lint (Prettier + ESLint, zero warning)
+        run: bun run lint
+
+      - name: Tests unitaires avec couverture (seuils bloquants)
+        run: bun run test:coverage
+
+      - name: Build
+        run: bun run build
+
+      - name: Couverture dans le resume du run
+        if: always()
+        run: |
+          {
+            echo "## Couverture front"
+            echo ""
+            echo "| Lignes | Instructions | Branches | Fonctions |"
+            echo "|---|---|---|---|"
+            jq -r '.total | "| \(.lines.pct) % | \(.statements.pct) % | \(.branches.pct) % | \(.functions.pct) % |"' coverage/coverage-summary.json
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publier le rapport de couverture
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-front
+          path: frontend/coverage
+
+  # Pile complete : l'API .NET tourne dans le job, le front est teste contre elle.
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Lancer l'API en arriere-plan
+        working-directory: .
+        env:
+          ASPNETCORE_URLS: http://localhost:5000
+        run: |
+          dotnet run --project src/Escrime.Api --configuration Release &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:5000/api/players > /dev/null && exit 0
+            sleep 2
+          done
+          echo "API injoignable apres 120 s" && exit 1
+
+      - name: Installer les dependances
+        run: bun install --frozen-lockfile
+
+      - name: Installer Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Tests e2e (Playwright)
+        run: bunx playwright test
+
+      - name: Publier les traces en cas d'echec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traces-playwright
+          path: frontend/test-results
