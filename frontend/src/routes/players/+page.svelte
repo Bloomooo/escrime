@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { ApiError, api } from '$lib/api';
 	import Button from '$lib/components/Button.svelte';
 	import EmptyState from '$lib/components/EmptyState.svelte';
@@ -141,7 +142,15 @@
 							</p>
 						</div>
 
-						<div class="mt-4 flex justify-end border-t border-border pt-3">
+						<div class="mt-4 flex items-center justify-between border-t border-border pt-3">
+							<!-- eslint-disable svelte/no-navigation-without-resolve -->
+							<a
+								href={resolve('/replay') + `?player=${player.id}`}
+								class="text-xs text-text-muted underline-offset-4 transition-colors hover:text-gold hover:underline"
+							>
+								Rouvrir les annales
+							</a>
+							<!-- eslint-enable svelte/no-navigation-without-resolve -->
 							<Button variant="danger" onclick={() => unenroll(player.id, player.name)}>
 								Désinscrire
 							</Button>
