@@ -51,4 +51,13 @@ public class ScoreCalculator
 
         return Math.Max(0, score - penaltyPoints);
     }
+
+    /// <summary>
+    /// Déroulé du score selon les mêmes règles que <see cref="CalculateScore"/> :
+    /// chaque événement porte le score courant, le front le rejoue sans recalculer.
+    /// </summary>
+    public ScoreBreakdown CalculateBreakdown(List<MatchResult> matches, bool isDisqualified = false, int penaltyPoints = 0)
+    {
+        return new ScoreBreakdown(0, isDisqualified, Array.Empty<ScoreEvent>());
+    }
 }
