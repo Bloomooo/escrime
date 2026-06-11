@@ -120,7 +120,8 @@ TC-004 — Quatre victoires consécutives : bonus accordé une seule fois
 
 TC-005 — Série interrompue par une défaite : pas de bonus
   Entrée  : [Win, Win, Loss, Win]
-  Attendu : 6 (pas 3 victoires consécutives)
+  Attendu : 9 (3+3+0+3, aucune série de 3 victoires — cf. H5 : le sujet
+            annonce 6, incompatible avec son propre barème)
   Test    : CalculateScore_StreakBrokenByLoss_NoBonus
 
 TC-006 — Série interrompue par un nul : pas de bonus
@@ -182,8 +183,10 @@ TC-015 — Pénalités négatives
 
 TC-016 — Très long tournoi (100 combats, pattern complexe)
   Entrée  : 10 répétitions du bloc [W,W,W,L,W,D,W,W,W,W] (100 combats)
-  Attendu : 350 — par bloc : 8×3 + 1 = 25 points de base, 2 séries de >= 3
-            victoires (+10), soit 35 × 10 blocs
+  Attendu : 305 — base 8×3+1 = 25 par bloc (250) ; bonus : la série finale
+            d'un bloc (WWWW) se poursuit dans le bloc suivant (WWW), donc
+            bloc 1 = 2 séries (+10) et blocs 2..10 = 1 nouvelle série
+            chacun (+45). Vérifié à la main : 250 + 55 = 305.
   Test    : CalculateScore_HundredMatchesComplexPattern_ReturnsPinnedScore
 
 ### TournamentRanking (REQ-E-010 à REQ-E-013)
@@ -283,6 +286,11 @@ Hypothèses (ambiguïtés du sujet, figées ici) :
 - H4 — Les gardes de validation (`matches` null, pénalités négatives)
   s'appliquent **avant** le court-circuit de disqualification : un appel
   invalide lève toujours une exception, même pour un joueur disqualifié.
+- H5 — Le cas n° 7 de la liste de tests du sujet annonce
+  « Win, Win, Loss, Win → 6 points », mais le barème du même sujet donne
+  3+3+0+3 = 9 (6 correspondrait à [Win, Win, Loss] sans le dernier
+  combat). On retient 9, conforme au barème. Coquille supposée, à
+  valider avec le formateur.
 
 | Risque | Probabilité | Impact | Mitigation |
 |--------|-------------|--------|------------|

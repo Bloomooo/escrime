@@ -252,6 +252,28 @@ public class ScoreCalculatorTests
             .WithParameterName("penaltyPoints");
     }
 
+    // TC-016
+    [Fact]
+    [Trait("Requirement", "REQ-E-009")]
+    public void CalculateScore_HundredMatchesComplexPattern_ReturnsPinnedScore()
+    {
+        // Arrange : 10 répétitions du bloc W,W,W,L,W,D,W,W,W,W (100 combats)
+        // Base : 8 victoires (24) + 1 nul (1) = 25 points × 10 blocs = 250.
+        // Bonus : le bloc finit par WWWW et le suivant commence par WWW, la
+        // série se poursuit donc d'un bloc à l'autre (série fusionnée, bonus
+        // déjà accordé) : bloc 1 → 2 séries (+10), blocs 2 à 10 → 1 nouvelle
+        // série chacun (+5×9 = 45). Total : 250 + 10 + 45 = 305.
+        string[] block = ["Win", "Win", "Win", "Loss", "Win", "Draw", "Win", "Win", "Win", "Win"];
+        var matches = ToMatches(Enumerable.Repeat(block, 10).SelectMany(b => b));
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        matches.Should().HaveCount(100);
+        score.Should().Be(305);
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
