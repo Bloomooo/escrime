@@ -18,6 +18,9 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@fontsource-variable/cinzel": "^5.2.8",
+		"@fontsource-variable/inter": "^5.2.8",
+		"@fontsource-variable/jetbrains-mono": "^5.2.8",
 		"@playwright/test": "^1.60.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.63.0",
