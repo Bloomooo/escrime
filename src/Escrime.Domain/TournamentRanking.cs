@@ -25,6 +25,6 @@ public class TournamentRanking
     /// </summary>
     public Player? GetChampion(List<Player> players)
     {
-        throw new NotImplementedException();
+        return GetRanking(players).FirstOrDefault();
     }
 }
