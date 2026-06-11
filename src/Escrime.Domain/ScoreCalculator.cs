@@ -15,6 +15,7 @@ public class ScoreCalculator
             throw new ArgumentNullException(nameof(matches), "The match list cannot be null.");
 
         var score = 0;
+        var winStreak = 0;
         foreach (var match in matches)
         {
             score += match.Outcome switch
@@ -23,6 +24,17 @@ public class ScoreCalculator
                 MatchResult.Result.Draw => 1,
                 _ => 0
             };
+
+            if (match.Outcome == MatchResult.Result.Win)
+            {
+                winStreak++;
+                if (winStreak == 3)
+                    score += 5; // bonus de série, accordé une seule fois par série
+            }
+            else
+            {
+                winStreak = 0; // un nul ou une défaite casse la série
+            }
         }
 
         return score;
