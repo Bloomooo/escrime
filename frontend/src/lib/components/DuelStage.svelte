@@ -140,20 +140,12 @@
 		await Promise.all([pose(a, GUARD, 620, easeInOutCubic), pose(b, GUARD, 620, easeInOutCubic)]);
 	}
 
-	function settle(figure: Figure, target: Partial<Pose>) {
-		Object.assign(figure.pose, GUARD, target);
-		draw(figure);
-	}
-
+	// The fight always animates, OS motion settings included: this is the heart
+	// of the demo and the verdict is also announced as text for assistive tech.
 	export async function play(outcome: DuelOutcome): Promise<void> {
 		if (running) return;
 		running = true;
 		try {
-			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-				settle(left, outcome === 'right' ? SETTLE : {});
-				settle(right, outcome === 'left' ? SETTLE : {});
-				return;
-			}
 			if (outcome === 'draw') await clashSequence(left, right);
 			else if (outcome === 'left') await attackSequence(left, right);
 			else await attackSequence(right, left);

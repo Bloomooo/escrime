@@ -246,10 +246,4 @@
 			transform: scale(0.4);
 		}
 	}
-
-	@media (prefers-reduced-motion: reduce) {
-		svg :is(.fencer-left, .fencer-right, .spark) {
-			animation: none !important;
-		}
-	}
 </style>
