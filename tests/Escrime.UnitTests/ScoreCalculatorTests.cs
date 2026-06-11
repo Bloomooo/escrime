@@ -61,6 +61,20 @@ public class ScoreCalculatorTests
         score.Should().Be(0, "because a player without any match has no points");
     }
 
+    // TC-014
+    [Fact]
+    [Trait("Requirement", "REQ-E-007")]
+    public void CalculateScore_NullMatches_ThrowsArgumentNullException()
+    {
+        // Act
+        Action act = () => _calculator.CalculateScore(null!);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithParameterName("matches")
+            .WithMessage("*cannot be null*");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
