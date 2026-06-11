@@ -7,6 +7,7 @@
 /* Tokens from arena-frontend-spec section 7; Tailwind derives the utilities. */
 @theme {
 	--color-bg: #0e0b16;
+	--color-arena: #0b0912;
 	--color-surface: #1a1526;
 	--color-surface-raised: #251d38;
 	--color-border: #2e2542;
