@@ -20,19 +20,19 @@ servable par n'importe quel hébergeur statique ; l'API reste à lancer à part)
 
 ## Scripts
 
-| Script                              | Rôle                                                            |
-| ----------------------------------- | --------------------------------------------------------------- |
-| `bun run dev`                       | serveur de développement                                        |
-| `bun run build` / `bun run preview` | build statique + aperçu                                         |
-| `bun run check`                     | typecheck svelte-check                                          |
-| `bun run lint` / `bun run format`   | Prettier + ESLint                                               |
-| `bun run test:unit -- --run`        | tests Vitest                                                    |
-| `bun run test:coverage`             | tests + couverture (seuils bloquants)                           |
-| `bun run test:e2e`                  | smoke Playwright (suspendu en CI tant que l'API n'y tourne pas) |
+| Script                              | Rôle                                                         |
+| ----------------------------------- | ------------------------------------------------------------ |
+| `bun run dev`                       | serveur de développement                                     |
+| `bun run build` / `bun run preview` | build statique + aperçu                                      |
+| `bun run check`                     | typecheck svelte-check                                       |
+| `bun run lint` / `bun run format`   | Prettier + ESLint                                            |
+| `bun run test:unit -- --run`        | tests Vitest                                                 |
+| `bun run test:coverage`             | tests + couverture (seuils bloquants)                        |
+| `bun run test:e2e`                  | smoke Playwright (la CI lance l'API .NET puis teste la pile) |
 
 ## Écrans
 
 Arène (hero), Combattants (forge, recherche, pénalités, disqualification),
 Duel (animation squelettique, le destin tranche), Reconstitution (rejoue le
-breakdown du score ; fixture de démonstration tant que le endpoint
-`score-breakdown` n'est pas livré côté back), Classement (podium, rangs).
+breakdown du score servi par `GET /api/players/{id}/score-breakdown`),
+Classement (podium, rangs).

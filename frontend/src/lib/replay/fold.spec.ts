@@ -1,7 +1,38 @@
 import { describe, expect, it } from 'vitest';
-import { breakdownFixtures } from '../api/breakdown-fixture';
-import type { ScoreEvent } from '../api/types';
+import type { ScoreBreakdown, ScoreEvent } from '../api/types';
 import { foldEvents } from './fold';
+
+// Sample stories shaped like the API contract (spec section 5).
+const samples: ScoreBreakdown[] = [
+	{
+		finalScore: 15,
+		isDisqualified: false,
+		events: [
+			{ type: 'match', index: 0, outcome: 'Win', points: 3, runningScore: 3 },
+			{ type: 'match', index: 1, outcome: 'Win', points: 3, runningScore: 6 },
+			{ type: 'match', index: 2, outcome: 'Win', points: 3, runningScore: 9 },
+			{ type: 'streakBonus', afterMatchIndex: 2, points: 5, runningScore: 14 },
+			{ type: 'match', index: 3, outcome: 'Draw', points: 1, runningScore: 15 }
+		]
+	},
+	{
+		finalScore: 0,
+		isDisqualified: false,
+		events: [
+			{ type: 'match', index: 0, outcome: 'Win', points: 3, runningScore: 3 },
+			{ type: 'penalty', points: -5, runningScore: -2 },
+			{ type: 'clampToZero', runningScore: 0 }
+		]
+	},
+	{
+		finalScore: 0,
+		isDisqualified: true,
+		events: [
+			{ type: 'match', index: 0, outcome: 'Win', points: 3, runningScore: 3 },
+			{ type: 'disqualification', runningScore: 0 }
+		]
+	}
+];
 
 const events: ScoreEvent[] = [
 	{ type: 'match', index: 0, outcome: 'Win', points: 3, runningScore: 3 },
@@ -46,11 +77,11 @@ describe('foldEvents', () => {
 		expect(frame.isDisqualified).toBe(true);
 	});
 
-	it('should_reach_the_final_score_when_folding_every_fixture_event', () => {
-		for (const fixture of breakdownFixtures) {
-			const frame = foldEvents(fixture.events, fixture.events.length - 1);
+	it('should_reach_the_final_score_when_folding_every_sample_story', () => {
+		for (const sample of samples) {
+			const frame = foldEvents(sample.events, sample.events.length - 1);
 
-			expect(frame.score).toBe(fixture.finalScore);
+			expect(frame.score).toBe(sample.finalScore);
 		}
 	});
 });
