@@ -75,6 +75,26 @@ public class MatchesEndpointTests
         negativeResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
+    // TC-140 — un disqualifié ne combat plus : l'enregistrement est refusé
+    [Fact]
+    [Trait("Requirement", "REQ-E-019")]
+    public async Task PostMatch_DisqualifiedPlayer_Returns409AndRecordsNothing()
+    {
+        // Arrange
+        using var factory = new EscrimeApiFactory();
+        using var client = factory.CreateClient();
+        var player = await CreatePlayer(client);
+        await client.PostAsync($"/api/players/{player.Id}/disqualification", null);
+
+        // Act
+        var response = await client.PostAsJsonAsync($"/api/players/{player.Id}/matches", new { result = "Win" });
+        var detail = await client.GetFromJsonAsync<PlayerDetailDto>($"/api/players/{player.Id}");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict, "because a disqualified player cannot fight anymore");
+        detail!.Matches.Should().BeEmpty("because the refused match must not reach the annals");
+    }
+
     // TC-113
     [Fact]
     [Trait("Requirement", "REQ-E-016")]

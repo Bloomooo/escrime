@@ -56,7 +56,8 @@ dotnet run --project src/Escrime.Api
 | GET | `/api/players` | Liste avec scores calculés | 200 |
 | GET | `/api/players/{id}` | Détail + combats | 200, 404 |
 | DELETE | `/api/players/{id}` | Désinscrire | 204, 404 |
-| POST | `/api/players/{id}/matches` `{"result": "Win"}` | Enregistrer un combat | 201, 400, 404 |
+| POST | `/api/players/{id}/matches` `{"result": "Win"}` | Enregistrer un combat (refusé si disqualifié) | 201, 400, 404, 409 |
+| GET | `/api/players/{id}/score-breakdown` | Déroulé du score pour la reconstitution front | 200, 404 |
 | POST | `/api/players/{id}/penalties` `{"points": 3}` | Infliger une pénalité | 200, 400, 404 |
 | POST | `/api/players/{id}/disqualification` | Disqualifier | 200, 404 |
 | GET | `/api/ranking` | Classement décroissant avec rangs | 200 |

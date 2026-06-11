@@ -92,6 +92,8 @@ Rappel des règles métier (sujet) :
 | REQ-E-015 | API : CRUD joueurs (création, lecture, liste, suppression) — v1.1 |
 | REQ-E-016 | API : enregistrement des combats, pénalités, disqualification ; score calculé à la volée — v1.1 |
 | REQ-E-017 | API : classement décroissant et champion — v1.1 |
+| REQ-E-018 | Déroulé du score (`CalculateBreakdown` + GET score-breakdown) : événements match / streakBonus / penalty / clampToZero / disqualification avec score courant, rejouable par le front sans recalcul — v1.2 |
+| REQ-E-019 | API : un joueur disqualifié ne peut plus enregistrer de combat (409) — v1.2 |
 
 ## 8. Cas de test prévus
 
@@ -246,6 +248,22 @@ TC-120 — GET /api/ranking → trié par score décroissant
 TC-121 — GET /api/ranking/champion → meilleur joueur
 TC-122 — GET /api/ranking/champion sans joueur → 404
 
+### Déroulé du score (REQ-E-018, REQ-E-019) — v1.2
+
+TC-030 — CalculateBreakdown [W,W,W,D] → match(3), match(6), match(9),
+          streakBonus(14), match(15) ; score final 15 (scénario spec front §5)
+TC-031 — pénalité sous zéro → penalty (score courant négatif) puis clampToZero(0)
+TC-032 — disqualifié → le déroulé raconte les combats puis disqualification(0)
+TC-033 — cohérence : FinalScore = CalculateScore et dernier événement = score final
+          (théorie, 6 scénarios dont série cassée et liste vide)
+TC-034 — garde-fous identiques à CalculateScore (null → ArgumentNullException,
+          pénalité négative → ArgumentException)
+TC-130 — GET score-breakdown (série + nul + pénalité) → séquence exacte des types
+          et scores courants à travers HTTP + EF
+TC-131 — GET score-breakdown joueur inconnu → 404
+TC-132 — GET score-breakdown joueur disqualifié → finit par disqualification, score 0
+TC-140 — POST match sur un disqualifié → 409, aucune trace dans les annales
+
 ## 9. Matrice de traçabilité
 
 | Exigence  | Cas de test            | Statut       |
@@ -267,6 +285,8 @@ TC-122 — GET /api/ranking/champion sans joueur → 404
 | REQ-E-015 | TC-101 à TC-105 (v1.1) | OK (vert)    |
 | REQ-E-016 | TC-110 à TC-113 (v1.1) | OK (vert)    |
 | REQ-E-017 | TC-120 à TC-122 (v1.1) | OK (vert)    |
+| REQ-E-018 | TC-030 à TC-034, TC-130 à TC-132 (v1.2) | OK (vert) |
+| REQ-E-019 | TC-140 (v1.2)          | OK (vert)    |
 
 ## 10. Hypothèses et risques
 
