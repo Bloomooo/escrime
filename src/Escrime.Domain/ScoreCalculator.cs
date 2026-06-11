@@ -14,6 +14,9 @@ public class ScoreCalculator
         if (matches is null)
             throw new ArgumentNullException(nameof(matches), "The match list cannot be null.");
 
+        if (isDisqualified)
+            return 0; // la disqualification annule tout, peu importe les performances
+
         var score = 0;
         var winStreak = 0;
         foreach (var match in matches)
