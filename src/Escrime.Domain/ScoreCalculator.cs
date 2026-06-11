@@ -14,6 +14,10 @@ public class ScoreCalculator
         if (matches is null)
             throw new ArgumentNullException(nameof(matches), "The match list cannot be null.");
 
+        if (penaltyPoints < 0)
+            throw new ArgumentException("Penalty points must be a positive number.", nameof(penaltyPoints));
+
+        // H4 : la validation s'applique avant le court-circuit de disqualification
         if (isDisqualified)
             return 0; // la disqualification annule tout, peu importe les performances
 
