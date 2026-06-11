@@ -21,6 +21,7 @@
 	const id = $props.id();
 
 	const selected = $derived(players.find((p) => p.id === selectedId) ?? null);
+	// Disqualified fighters stay visible but cannot enter a duel (back rule to come).
 	const choices = $derived(players.filter((p) => p.id !== excludeId));
 </script>
 
@@ -48,7 +49,9 @@
 			>
 				<option value={null}>{label}</option>
 				{#each choices as player (player.id)}
-					<option value={player.id}>{player.name}</option>
+					<option value={player.id} disabled={player.isDisqualified}>
+						{player.name}{player.isDisqualified ? ' · disqualifié' : ''}
+					</option>
 				{/each}
 			</select>
 			<p class="mt-2 font-mono text-xs text-text-muted">

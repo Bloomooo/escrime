@@ -8,6 +8,7 @@
 	import ResultDots from '$lib/components/ResultDots.svelte';
 	import TextField from '$lib/components/TextField.svelte';
 	import { initials } from '$lib/format/initials';
+	import { forgeUniqueName } from '$lib/format/unique-name';
 
 	let { data } = $props();
 
@@ -43,7 +44,11 @@
 		submitting = true;
 		feedback = null;
 		try {
-			const created = await api.createPlayer(forgeName.trim());
+			const name = forgeUniqueName(
+				forgeName.trim(),
+				data.players.map((p) => p.name)
+			);
+			const created = await api.createPlayer(name);
 			if (penalty > 0) await api.addPenalty(created.id, penalty);
 			if (disqualify) await api.disqualify(created.id);
 			resetForge();
