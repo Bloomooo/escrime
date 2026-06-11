@@ -24,6 +24,13 @@ public class TournamentService
     /// </summary>
     public Player? AnnounceChampion()
     {
-        throw new NotImplementedException();
+        var players = _repository.GetAll();
+        var champion = _ranking.GetChampion(players);
+        if (champion is null)
+            return null;
+
+        var score = _scoreCalculator.CalculateScore(champion.Matches, champion.IsDisqualified, champion.PenaltyPoints);
+        _notifier.NotifyChampion(champion.Name, score);
+        return champion;
     }
 }
