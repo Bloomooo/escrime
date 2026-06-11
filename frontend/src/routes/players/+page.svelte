@@ -2,6 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { ApiError, api } from '$lib/api';
 	import Button from '$lib/components/Button.svelte';
+	import ResultDots from '$lib/components/ResultDots.svelte';
 	import EmptyState from '$lib/components/EmptyState.svelte';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import Panel from '$lib/components/Panel.svelte';
@@ -88,6 +89,10 @@
 							Disqualifié
 						</span>
 					{/if}
+				</div>
+
+				<div class="mt-2">
+					<ResultDots matches={data.matches.get(player.id) ?? []} />
 				</div>
 
 				<p class="mt-4 font-mono text-3xl text-gold">{player.score}</p>

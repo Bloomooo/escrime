@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Player } from '$lib/api';
+	import { initials } from '$lib/format/initials';
 
 	interface Props {
 		label: string;
@@ -21,15 +22,6 @@
 
 	const selected = $derived(players.find((p) => p.id === selectedId) ?? null);
 	const choices = $derived(players.filter((p) => p.id !== excludeId));
-
-	function initials(name: string): string {
-		return name
-			.split(/\s+/)
-			.filter(Boolean)
-			.slice(0, 2)
-			.map((part) => part[0].toUpperCase())
-			.join('');
-	}
 </script>
 
 <div
