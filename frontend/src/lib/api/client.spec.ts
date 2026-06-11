@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { demoBreakdown } from './breakdown-fixture';
 import { ApiError, createApiClient } from './client';
-import type { Player, PlayerDetail } from './types';
+import type { Player, PlayerDetail, ScoreBreakdown } from './types';
 
 const galahad: Player = {
 	id: 1,
@@ -125,6 +126,36 @@ describe('createApiClient', () => {
 
 		expect(calls[0].url).toBe('http://api.test/api/ranking/champion');
 		expect(champion).toEqual(entry);
+	});
+
+	it('should_return_the_api_breakdown_with_demo_false_when_the_endpoint_answers', async () => {
+		const breakdown: ScoreBreakdown = {
+			finalScore: 3,
+			isDisqualified: false,
+			events: [{ type: 'match', index: 0, outcome: 'Win', points: 3, runningScore: 3 }]
+		};
+		const { calls, client } = clientWith(200, breakdown);
+
+		const result = await client.getScoreBreakdown(1);
+
+		expect(calls[0].url).toBe('http://api.test/api/players/1/score-breakdown');
+		expect(result).toEqual({ ...breakdown, demo: false });
+	});
+
+	it('should_fall_back_to_the_demo_fixture_when_the_breakdown_endpoint_returns_404', async () => {
+		const { client } = clientWith(404);
+
+		const result = await client.getScoreBreakdown(7);
+
+		expect(result).toEqual({ ...demoBreakdown(7), demo: true });
+	});
+
+	it('should_rethrow_when_the_breakdown_endpoint_fails_with_another_status', async () => {
+		const { client } = clientWith(500);
+
+		const failure = client.getScoreBreakdown(1);
+
+		await expect(failure).rejects.toMatchObject({ status: 500 });
 	});
 
 	it('should_throw_an_ApiError_with_the_status_when_the_response_is_not_ok', async () => {
