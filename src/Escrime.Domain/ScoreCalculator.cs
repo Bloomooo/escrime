@@ -11,6 +11,9 @@ public class ScoreCalculator
     /// <returns>Score final (jamais négatif)</returns>
     public int CalculateScore(List<MatchResult> matches, bool isDisqualified = false, int penaltyPoints = 0)
     {
+        if (matches is null)
+            throw new ArgumentNullException(nameof(matches), "The match list cannot be null.");
+
         var score = 0;
         foreach (var match in matches)
         {
