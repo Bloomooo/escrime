@@ -13,8 +13,8 @@ Domaine métier (calcul de score, classement) développé en **TDD**
 
 - `src/Escrime.Domain` — règles métier : `ScoreCalculator`, `TournamentRanking`, `TournamentService`
 - `src/Escrime.Api` — API REST + persistance SQLite (EF Core) + Swagger
-- `tests/Escrime.UnitTests` — 28 tests unitaires (xUnit, FluentAssertions, Moq)
-- `tests/Escrime.IntegrationTests` — 12 tests d'intégration (WebApplicationFactory + SQLite in-memory)
+- `tests/Escrime.UnitTests` — 38 tests unitaires (xUnit, FluentAssertions, Moq)
+- `tests/Escrime.IntegrationTests` — 16 tests d'intégration (WebApplicationFactory + SQLite in-memory)
 - `docs/TEST_PLAN.md` — plan de test (rédigé avant le code) ; `docs/TEST_REPORT.md` — rapport d'exécution
 - `.github/workflows/ci.yml` — CI : tests + couverture publiée
 
@@ -28,7 +28,7 @@ Les ambiguïtés du sujet sont documentées en hypothèses H1–H5 (TEST_PLAN §
 ## Lancer les tests
 
 ```bash
-dotnet test                                        # 40 tests (28 unitaires + 12 intégration)
+dotnet test                                        # 54 tests (38 unitaires + 16 intégration)
 dotnet test --collect:"XPlat Code Coverage"        # + couverture Cobertura
 ```
 
