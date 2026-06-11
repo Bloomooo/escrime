@@ -206,6 +206,36 @@ public class ScoreCalculatorTests
         score.Should().Be(7, "because 10 points - 3 penalty points = 7");
     }
 
+    // TC-011
+    [Fact]
+    [Trait("Requirement", "REQ-E-005")]
+    public void CalculateScore_PenaltiesExceedScore_ReturnsZero()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Draw", "Draw"]); // 5 points
+
+        // Act
+        var score = _calculator.CalculateScore(matches, penaltyPoints: 8);
+
+        // Assert
+        score.Should().Be(0, "because the final score can never be negative (5 - 8 is floored to 0)");
+    }
+
+    // TC-012
+    [Fact]
+    [Trait("Requirement", "REQ-E-005")]
+    public void CalculateScore_PenaltiesEqualScore_ReturnsZero()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Win", "Draw"]); // 7 points
+
+        // Act
+        var score = _calculator.CalculateScore(matches, penaltyPoints: 7);
+
+        // Assert
+        score.Should().Be(0, "because 7 - 7 = 0");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
