@@ -18,21 +18,21 @@
 		<img
 			src={blason}
 			alt=""
-			class="h-24 w-auto motion-safe:animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_both]"
+			class="h-24 w-auto animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_both]"
 		/>
 		<h1
-			class="mt-10 max-w-3xl font-display text-5xl leading-tight text-balance text-text motion-safe:animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_0.15s_both] sm:text-6xl"
+			class="mt-10 max-w-3xl font-display text-5xl leading-tight text-balance text-text animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_0.15s_both] sm:text-6xl"
 		>
 			Le tournoi se regarde, il ne se consulte pas
 		</h1>
 		<p
-			class="mt-8 max-w-xl text-text-muted motion-safe:animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_0.3s_both]"
+			class="mt-8 max-w-xl text-text-muted animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_0.3s_both]"
 		>
 			Chaque duel des annales se rejoue dans l'arène, et le score se forge sous vos yeux, règle
 			après règle : la victoire, la série, la sanction.
 		</p>
 		<div
-			class="mt-10 flex flex-wrap justify-center gap-4 motion-safe:animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_0.45s_both]"
+			class="mt-10 flex flex-wrap justify-center gap-4 animate-[hero-rise_0.8s_cubic-bezier(0.4,0,0.2,1)_0.45s_both]"
 		>
 			<a
 				href={resolve('/duel')}

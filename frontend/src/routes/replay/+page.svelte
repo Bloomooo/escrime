@@ -57,8 +57,6 @@
 		return `duel ${n} sur ${totalMatches}`;
 	});
 
-	const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 	function clearTimer() {
 		clearTimeout(timer);
 		timer = undefined;
@@ -84,10 +82,6 @@
 
 	function play() {
 		if (!breakdown) return;
-		if (prefersReducedMotion()) {
-			goToVerdict();
-			return;
-		}
 		if (phase === 'verdict') cursor = -1;
 		playing = true;
 		stepForward();
@@ -133,7 +127,7 @@
 			const loaded = await api.getScoreBreakdown(id);
 			if (selectedId !== id) return;
 			breakdown = loaded;
-			if (loaded.events.length === 0 || prefersReducedMotion()) goToVerdict();
+			if (loaded.events.length === 0) goToVerdict();
 			else play();
 		} catch {
 			if (selectedId === id) loadFailed = true;
