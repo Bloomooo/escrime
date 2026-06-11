@@ -90,6 +90,51 @@ public class ScoreCalculatorTests
         score.Should().Be(14, "because 3*3 = 9 points + 5 bonus for three consecutive wins");
     }
 
+    // TC-004
+    [Fact]
+    [Trait("Requirement", "REQ-E-002")]
+    public void CalculateScore_FourConsecutiveWins_AddsBonusOnlyOnce()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Win", "Win", "Win"]);
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        score.Should().Be(17, "because 4*3 = 12 points + a single 5 points bonus for the streak");
+    }
+
+    // TC-005
+    [Fact]
+    [Trait("Requirement", "REQ-E-002")]
+    public void CalculateScore_StreakBrokenByLoss_NoBonus()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Win", "Loss", "Win"]);
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        score.Should().Be(9, "because 3+3+0+3 = 9 points and no streak reaches three wins");
+    }
+
+    // TC-006
+    [Fact]
+    [Trait("Requirement", "REQ-E-002")]
+    public void CalculateScore_StreakBrokenByDraw_NoBonus()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Draw", "Win", "Win"]);
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        score.Should().Be(10, "because 3+1+3+3 = 10 points and the draw breaks the streak");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
