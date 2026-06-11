@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Test (avec couverture)
+        run: >
+          dotnet test --no-build -c Release
+          --collect:"XPlat Code Coverage"
+          --results-directory TestResults
+          --logger trx
+
+      - name: Rapport de couverture
+        uses: danielpalme/ReportGenerator-GitHub-Action@5
+        if: always()
+        with:
+          reports: "TestResults/**/coverage.cobertura.xml"
+          targetdir: coverage-report
+          reporttypes: "HtmlInline;MarkdownSummaryGithub"
+
+      - name: Couverture dans le resume du run
+        if: always()
+        run: cat coverage-report/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publier le rapport HTML
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage-report
