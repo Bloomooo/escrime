@@ -2,12 +2,13 @@
 
 ## 1. Identification
 - Projet : Système de notation pour un tournoi d'escrime fantastique
-- Version : 1.0 (exigences du domaine REQ-E-001 à REQ-E-014 ; les exigences
-  API REQ-E-015 à REQ-E-017 seront détaillées en v1.1 lors de la phase
-  d'évolution — base de données + API REST)
-- Auteur : Yanis Mechta
+- Version : 1.1 (v1.0 : exigences du domaine REQ-E-001 à REQ-E-014 ;
+  v1.1 : exécution complète, ajout de H5 — coquille du sujet sur WWLW —,
+  correction de la valeur épinglée de TC-016 (350 → 305, séries
+  contiguës entre blocs), exigences API REQ-E-015..017 exécutées)
+- Auteurs : Yanis Mechta, Eddin Adou
 - Date : 2026-06-11
-- Statut : Validé
+- Statut : Exécuté — 40/40 tests verts
 
 ## 2. Périmètre
 
@@ -247,25 +248,25 @@ TC-122 — GET /api/ranking/champion sans joueur → 404
 
 ## 9. Matrice de traçabilité
 
-| Exigence  | Cas de test            | Statut prévu |
+| Exigence  | Cas de test            | Statut       |
 |-----------|------------------------|--------------|
-| REQ-E-001 | TC-001, TC-002         | À faire      |
-| REQ-E-002 | TC-003 à TC-007        | À faire      |
-| REQ-E-003 | TC-008, TC-009         | À faire      |
-| REQ-E-004 | TC-010                 | À faire      |
-| REQ-E-005 | TC-011, TC-012         | À faire      |
-| REQ-E-006 | TC-013                 | À faire      |
-| REQ-E-007 | TC-014                 | À faire      |
-| REQ-E-008 | TC-015                 | À faire      |
-| REQ-E-009 | TC-016                 | À faire      |
-| REQ-E-010 | TC-017                 | À faire      |
-| REQ-E-011 | TC-018                 | À faire      |
-| REQ-E-012 | TC-019                 | À faire      |
-| REQ-E-013 | TC-020, TC-021         | À faire      |
-| REQ-E-014 | TC-022, TC-023         | À faire      |
-| REQ-E-015 | TC-101 à TC-105 (v1.1) | À faire      |
-| REQ-E-016 | TC-110 à TC-113 (v1.1) | À faire      |
-| REQ-E-017 | TC-120 à TC-122 (v1.1) | À faire      |
+| REQ-E-001 | TC-001, TC-002         | OK (vert)    |
+| REQ-E-002 | TC-003 à TC-007        | OK (vert)    |
+| REQ-E-003 | TC-008, TC-009         | OK (vert)    |
+| REQ-E-004 | TC-010                 | OK (vert)    |
+| REQ-E-005 | TC-011, TC-012         | OK (vert)    |
+| REQ-E-006 | TC-013                 | OK (vert)    |
+| REQ-E-007 | TC-014                 | OK (vert)    |
+| REQ-E-008 | TC-015                 | OK (vert)    |
+| REQ-E-009 | TC-016                 | OK (vert)    |
+| REQ-E-010 | TC-017                 | OK (vert)    |
+| REQ-E-011 | TC-018                 | OK (vert)    |
+| REQ-E-012 | TC-019                 | OK (vert)    |
+| REQ-E-013 | TC-020, TC-021         | OK (vert)    |
+| REQ-E-014 | TC-022, TC-023         | OK (vert)    |
+| REQ-E-015 | TC-101 à TC-105 (v1.1) | OK (vert)    |
+| REQ-E-016 | TC-110 à TC-113 (v1.1) | OK (vert)    |
+| REQ-E-017 | TC-120 à TC-122 (v1.1) | OK (vert)    |
 
 ## 10. Hypothèses et risques
 
