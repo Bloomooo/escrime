@@ -75,6 +75,57 @@ public class PlayersController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>Enregistre le résultat d'un combat (dans l'ordre chronologique).</summary>
+    [HttpPost("{id:int}/matches")]
+    [ProducesResponseType(typeof(MatchDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<MatchDto>> RecordMatch(int id, RecordMatchRequest request)
+    {
+        var entity = await FindPlayer(id);
+        if (entity is null)
+            return NotFound();
+
+        var match = new MatchResultEntity { PlayerId = id, Result = request.Result };
+        _db.Matches.Add(match);
+        await _db.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetById), new { id }, new MatchDto(match.Id, match.Result));
+    }
+
+    /// <summary>Inflige des points de pénalité (cumulés, le score final reste >= 0).</summary>
+    [HttpPost("{id:int}/penalties")]
+    [ProducesResponseType(typeof(PlayerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<PlayerDto>> AddPenalty(int id, AddPenaltyRequest request)
+    {
+        var entity = await FindPlayer(id);
+        if (entity is null)
+            return NotFound();
+
+        entity.PenaltyPoints += request.Points;
+        await _db.SaveChangesAsync();
+
+        return DtoMapper.ToDto(entity, _calculator);
+    }
+
+    /// <summary>Disqualifie un joueur : son score devient 0 définitivement.</summary>
+    [HttpPost("{id:int}/disqualification")]
+    [ProducesResponseType(typeof(PlayerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<PlayerDto>> Disqualify(int id)
+    {
+        var entity = await FindPlayer(id);
+        if (entity is null)
+            return NotFound();
+
+        entity.IsDisqualified = true;
+        await _db.SaveChangesAsync();
+
+        return DtoMapper.ToDto(entity, _calculator);
+    }
+
     private Task<PlayerEntity?> FindPlayer(int id) =>
         _db.Players
             .Include(p => p.Matches.OrderBy(m => m.Id))
