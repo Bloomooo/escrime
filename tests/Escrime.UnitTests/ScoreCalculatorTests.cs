@@ -161,6 +161,36 @@ public class ScoreCalculatorTests
         score.Should().Be(expectedScore, because);
     }
 
+    // TC-008
+    [Fact]
+    [Trait("Requirement", "REQ-E-003")]
+    public void CalculateScore_DisqualifiedWithPositiveScore_ReturnsZero()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Win", "Win"]); // 14 points sans disqualification
+
+        // Act
+        var score = _calculator.CalculateScore(matches, isDisqualified: true);
+
+        // Assert
+        score.Should().Be(0, "because a disqualified player loses everything regardless of past performance");
+    }
+
+    // TC-009
+    [Fact]
+    [Trait("Requirement", "REQ-E-003")]
+    public void CalculateScore_DisqualifiedWithoutMatches_ReturnsZero()
+    {
+        // Arrange
+        var matches = new List<MatchResult>();
+
+        // Act
+        var score = _calculator.CalculateScore(matches, isDisqualified: true);
+
+        // Assert
+        score.Should().Be(0);
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
