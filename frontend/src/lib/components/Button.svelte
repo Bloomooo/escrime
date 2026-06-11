@@ -10,9 +10,9 @@
 	let { variant = 'primary', children, ...rest }: Props = $props();
 
 	const styles = {
-		primary: 'bg-gold font-semibold text-bg hover:bg-gold/85',
+		primary: 'bg-gold font-semibold text-bg hover:bg-gold-bright',
 		ghost: 'border border-border text-text-muted hover:border-gold hover:text-text',
-		danger: 'border border-border text-text-muted hover:border-loss hover:text-loss'
+		danger: 'border border-border text-loss hover:border-loss'
 	};
 </script>
 

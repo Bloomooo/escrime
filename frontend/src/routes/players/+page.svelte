@@ -77,7 +77,7 @@
 	<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 		{#each data.players as player (player.id)}
 			<li
-				class="group rounded-card border border-border bg-surface p-6 transition-colors hover:border-gold/60"
+				class="rounded-card border border-border bg-surface p-6 transition-[border-color,transform] duration-150 hover:-translate-y-[3px] hover:border-gold"
 			>
 				<div class="flex items-start justify-between gap-3">
 					<h2 class="font-display text-lg text-text">{player.name}</h2>
