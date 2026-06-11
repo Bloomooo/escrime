@@ -46,6 +46,21 @@ public class ScoreCalculatorTests
         score.Should().Be(expectedScore);
     }
 
+    // TC-013
+    [Fact]
+    [Trait("Requirement", "REQ-E-006")]
+    public void CalculateScore_EmptyMatches_ReturnsZero()
+    {
+        // Arrange
+        var matches = new List<MatchResult>();
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        score.Should().Be(0, "because a player without any match has no points");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
