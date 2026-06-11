@@ -135,6 +135,32 @@ public class ScoreCalculatorTests
         score.Should().Be(10, "because 3+1+3+3 = 10 points and the draw breaks the streak");
     }
 
+    // TC-007
+    public static TheoryData<string[], int, string> MultipleStreakCases => new()
+    {
+        // Exemple 3 du sujet : 21 points + 5 (série de 3) + 5 (série de 4) — cf. H1
+        { ["Win", "Win", "Win", "Loss", "Win", "Win", "Win", "Win"], 31, "exemple 3 du sujet (H1)" },
+        // « Win-Loss-Win-Win-Win » : bonus accordé pour les 3 dernières victoires
+        { ["Win", "Loss", "Win", "Win", "Win"], 17, "bonus pour les 3 dernières victoires" },
+        // Deux séries de 3 exactement
+        { ["Win", "Win", "Win", "Loss", "Win", "Win", "Win"], 28, "deux séries de 3" }
+    };
+
+    [Theory]
+    [Trait("Requirement", "REQ-E-002")]
+    [MemberData(nameof(MultipleStreakCases))]
+    public void CalculateScore_MultipleWinStreaks_AddsBonusPerStreak(string[] results, int expectedScore, string because)
+    {
+        // Arrange
+        var matches = ToMatches(results);
+
+        // Act
+        var score = _calculator.CalculateScore(matches);
+
+        // Assert
+        score.Should().Be(expectedScore, because);
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
