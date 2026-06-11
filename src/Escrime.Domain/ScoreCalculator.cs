@@ -11,6 +11,17 @@ public class ScoreCalculator
     /// <returns>Score final (jamais négatif)</returns>
     public int CalculateScore(List<MatchResult> matches, bool isDisqualified = false, int penaltyPoints = 0)
     {
-        throw new NotImplementedException();
+        var score = 0;
+        foreach (var match in matches)
+        {
+            score += match.Outcome switch
+            {
+                MatchResult.Result.Win => 3,
+                MatchResult.Result.Draw => 1,
+                _ => 0
+            };
+        }
+
+        return score;
     }
 }
