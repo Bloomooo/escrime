@@ -1,10 +1,22 @@
 <script lang="ts">
+	import { onNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import './layout.css';
 	import blason from '$lib/assets/blason-or.svg';
 
 	let { children } = $props();
+
+	// Spec section 6: View Transitions between screens, browsers without it just navigate.
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+		return new Promise((resolveTransition) => {
+			document.startViewTransition(() => {
+				resolveTransition();
+				return navigation.complete;
+			});
+		});
+	});
 
 	const links = [
 		{ href: resolve('/'), label: 'Arène' },

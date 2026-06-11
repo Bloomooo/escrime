@@ -140,6 +140,17 @@
 		}
 	}
 
+	// Deep link from the players and ranking screens: /replay?player={id}.
+	let preselectConsumed = false;
+	$effect(() => {
+		if (preselectConsumed || data.preselected === null) return;
+		preselectConsumed = true;
+		if (data.players.some((p) => p.id === data.preselected)) {
+			selectedId = data.preselected;
+			onSelect();
+		}
+	});
+
 	function onSelect() {
 		if (selectedId === null) {
 			clearTimer();
