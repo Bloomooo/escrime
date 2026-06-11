@@ -14,7 +14,10 @@ public class TournamentRanking
     /// </summary>
     public List<Player> GetRanking(List<Player> players)
     {
-        throw new NotImplementedException();
+        // OrderByDescending est un tri stable : les ex æquo gardent leur ordre d'entrée (H2)
+        return players
+            .OrderByDescending(p => _scoreCalculator.CalculateScore(p.Matches, p.IsDisqualified, p.PenaltyPoints))
+            .ToList();
     }
 
     /// <summary>
