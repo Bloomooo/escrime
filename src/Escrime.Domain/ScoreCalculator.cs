@@ -40,6 +40,6 @@ public class ScoreCalculator
             }
         }
 
-        return score - penaltyPoints;
+        return Math.Max(0, score - penaltyPoints);
     }
 }
