@@ -1,11 +1,9 @@
-import { demoBreakdown } from './breakdown-fixture';
 import type {
 	Match,
 	MatchOutcome,
 	Player,
 	PlayerDetail,
 	RankingEntry,
-	ReplayBreakdown,
 	ScoreBreakdown
 } from './types';
 
@@ -58,18 +56,8 @@ export function createApiClient({ baseUrl, fetchFn = fetch }: ApiClientOptions) 
 		addPenalty: (id: number, points: number) =>
 			request<Player>(`/api/players/${id}/penalties`, post({ points })),
 		disqualify: (id: number) => request<Player>(`/api/players/${id}/disqualification`, post()),
-		getScoreBreakdown: async (id: number): Promise<ReplayBreakdown> => {
-			try {
-				const breakdown = await request<ScoreBreakdown>(`/api/players/${id}/score-breakdown`);
-				return { ...breakdown, demo: false };
-			} catch (cause) {
-				// Spec section 5: the endpoint is not live yet, a 404 falls back to demo data.
-				if (cause instanceof ApiError && cause.status === 404) {
-					return { ...demoBreakdown(id), demo: true };
-				}
-				throw cause;
-			}
-		},
+		getScoreBreakdown: (id: number) =>
+			request<ScoreBreakdown>(`/api/players/${id}/score-breakdown`),
 		getRanking: () => request<RankingEntry[]>('/api/ranking'),
 		getChampion: () => request<RankingEntry>('/api/ranking/champion')
 	};

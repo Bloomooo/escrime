@@ -44,6 +44,3 @@ export interface ScoreBreakdown {
 	isDisqualified: boolean;
 	events: ScoreEvent[];
 }
-
-// demo marks a breakdown served from the local fixture while the endpoint is not live.
-export type ReplayBreakdown = ScoreBreakdown & { demo: boolean };

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { api, type MatchOutcome, type ReplayBreakdown, type ScoreEvent } from '$lib/api';
+	import { api, type MatchOutcome, type ScoreBreakdown, type ScoreEvent } from '$lib/api';
 	import ArenaScene, { type SceneMode } from '$lib/components/ArenaScene.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import EmptyState from '$lib/components/EmptyState.svelte';
@@ -19,7 +19,7 @@
 	const selectId = $props.id();
 
 	let selectedId = $state<number | null>(null);
-	let breakdown = $state<ReplayBreakdown | null>(null);
+	let breakdown = $state<ScoreBreakdown | null>(null);
 	let loadFailed = $state(false);
 	let cursor = $state(-1);
 	let phase = $state<Phase>('idle');
@@ -262,9 +262,6 @@
 				<option value={player.id}>{player.name}</option>
 			{/each}
 		</select>
-		{#if breakdown?.demo}
-			<p class="font-mono text-xs text-text-muted">démonstration, endpoint back à venir</p>
-		{/if}
 	</div>
 
 	{#if loadFailed}

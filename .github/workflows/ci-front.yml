@@ -62,10 +62,8 @@ jobs:
           name: coverage-front
           path: frontend/coverage
 
-  # Suspendu
-  # le job repassera a if: true quand l'API sera lancee dans le pipeline.
+  # Pile complete : l'API .NET tourne dans le job, le front est teste contre elle.
   e2e:
-    if: false
     runs-on: ubuntu-latest
 
     steps:
@@ -74,6 +72,23 @@ jobs:
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Lancer l'API en arriere-plan
+        working-directory: .
+        env:
+          ASPNETCORE_URLS: http://localhost:5000
+        run: |
+          dotnet run --project src/Escrime.Api --configuration Release &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:5000/api/players > /dev/null && exit 0
+            sleep 2
+          done
+          echo "API injoignable apres 120 s" && exit 1
 
       - name: Installer les dependances
         run: bun install --frozen-lockfile

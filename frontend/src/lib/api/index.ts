@@ -10,7 +10,6 @@ export type {
 	Player,
 	PlayerDetail,
 	RankingEntry,
-	ReplayBreakdown,
 	ScoreBreakdown,
 	ScoreEvent
 } from './types';

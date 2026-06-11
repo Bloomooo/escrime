@@ -2,7 +2,7 @@
 
 ## 1. Identification
 - Projet : Système de notation pour un tournoi d'escrime fantastique
-- Référence : plan de test v1.1 (docs/TEST_PLAN.md)
+- Référence : plan de test v1.2 (docs/TEST_PLAN.md)
 - Auteurs : Yanis Mechta, Eddin Adou
 - Date d'exécution : 2026-06-11
 - Environnement : .NET SDK 9.0.310 (Linux), xUnit 2.9.2,
@@ -13,11 +13,11 @@
 
 | Campagne | Tests | Verts | Rouges | Durée |
 |---|---|---|---|---|
-| Unitaires (Escrime.UnitTests) | 28 | 28 | 0 | ~0,5 s |
-| Intégration API (Escrime.IntegrationTests) | 12 | 12 | 0 | ~3 s |
-| **Total** | **40** | **40** | **0** | |
+| Unitaires (Escrime.UnitTests) | 38 | 38 | 0 | ~0,5 s |
+| Intégration API (Escrime.IntegrationTests) | 16 | 16 | 0 | ~3 s |
+| **Total** | **54** | **54** | **0** | |
 
-- 100 % des exigences REQ-E-001 à REQ-E-017 couvertes et vérifiées
+- 100 % des exigences REQ-E-001 à REQ-E-019 couvertes et vérifiées
   (matrice de traçabilité : TEST_PLAN §9).
 - Critère du sujet « minimum 15 tests » largement dépassé (28 tests
   unitaires, dont 2 Theory paramétrées InlineData + MemberData).
@@ -61,6 +61,8 @@
 | REQ-E-015 API CRUD joueurs | TC-101..105 | ✅ | |
 | REQ-E-016 API combats/pénalités/DQ | TC-110..113 | ✅ | TC-110 : 4 Wins via HTTP → 17 |
 | REQ-E-017 API classement | TC-120..122 | ✅ | |
+| REQ-E-018 déroulé du score | TC-030..034, TC-130..132 | ✅ | rejoué tel quel par le front |
+| REQ-E-019 combat refusé si DQ | TC-140 | ✅ | 409 Conflict |
 
 ## 5. Vérification de bout en bout (manuelle)
 
