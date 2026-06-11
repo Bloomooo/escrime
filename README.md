@@ -1,5 +1,9 @@
 # Tournoi d'escrime fantastique — Système de notation
 
+[![CI](https://github.com/Bloomooo/escrime/actions/workflows/ci.yml/badge.svg)](https://github.com/Bloomooo/escrime/actions/workflows/ci.yml)
+[![Couverture lignes](https://bloomooo.github.io/escrime/badge_linecoverage.svg)](https://bloomooo.github.io/escrime/)
+[![Couverture branches](https://bloomooo.github.io/escrime/badge_branchcoverage.svg)](https://bloomooo.github.io/escrime/)
+
 TP : système de notation pour un tournoi d'escrime fantastique.
 Domaine métier (calcul de score, classement) développé en **TDD**
 (xUnit + FluentAssertions + Moq), exposé via une **API REST**
@@ -71,15 +75,15 @@ Le score n'est **jamais stocké** : il est recalculé par `ScoreCalculator`
 à chaque lecture (les combats sont relus dans l'ordre chronologique,
 le bonus de série en dépend).
 
-## CI
+## CI et couverture en ligne
 
 À chaque push : build Release, 40 tests, couverture agrégée
 (ReportGenerator) affichée dans le résumé du run + rapport HTML en
-artifact. Pour activer : pousser le repo sur GitHub, par exemple
+artifact. Sur `main`, le rapport complet et les badges de couverture
+sont publiés sur GitHub Pages :
+**https://bloomooo.github.io/escrime/**
 
-```bash
-gh repo create escrime --private --source . --push
-```
+(Prérequis une seule fois : Settings → Pages → Source = « GitHub Actions ».)
 
 ## Démarche TDD
 
