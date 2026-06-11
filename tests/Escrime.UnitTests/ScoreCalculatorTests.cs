@@ -236,6 +236,22 @@ public class ScoreCalculatorTests
         score.Should().Be(0, "because 7 - 7 = 0");
     }
 
+    // TC-015
+    [Fact]
+    [Trait("Requirement", "REQ-E-008")]
+    public void CalculateScore_NegativePenalties_ThrowsArgumentException()
+    {
+        // Arrange
+        var matches = ToMatches(["Win"]);
+
+        // Act
+        Action act = () => _calculator.CalculateScore(matches, penaltyPoints: -5);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithParameterName("penaltyPoints");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
