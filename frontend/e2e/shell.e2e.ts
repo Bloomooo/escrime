@@ -3,7 +3,9 @@ import { expect, test } from '@playwright/test';
 test('should_display_the_arena_title_when_visiting_the_home', async ({ page }) => {
 	await page.goto('/');
 
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText("Arène d'Acier & d'Arcane");
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+		'Le tournoi se regarde, il ne se consulte pas'
+	);
 });
 
 const screens = [
