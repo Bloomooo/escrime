@@ -40,6 +40,6 @@ public class ScoreCalculator
             }
         }
 
-        return score;
+        return score - penaltyPoints;
     }
 }
