@@ -191,6 +191,21 @@ public class ScoreCalculatorTests
         score.Should().Be(0);
     }
 
+    // TC-010
+    [Fact]
+    [Trait("Requirement", "REQ-E-004")]
+    public void CalculateScore_PenaltiesSubtracted_ReturnsReducedScore()
+    {
+        // Arrange
+        var matches = ToMatches(["Win", "Win", "Draw", "Win"]); // 10 points, pas de bonus
+
+        // Act
+        var score = _calculator.CalculateScore(matches, penaltyPoints: 3);
+
+        // Assert
+        score.Should().Be(7, "because 10 points - 3 penalty points = 7");
+    }
+
     private static List<MatchResult> ToMatches(IEnumerable<string> results) =>
         results.Select(r => new MatchResult(Enum.Parse<MatchResult.Result>(r))).ToList();
 }
