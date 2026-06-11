@@ -2,6 +2,11 @@ namespace Escrime.Domain;
 
 public class ScoreCalculator
 {
+    private const int PointsPerWin = 3;
+    private const int PointsPerDraw = 1;
+    private const int WinStreakLength = 3;
+    private const int StreakBonus = 5;
+
     /// <summary>
     /// Calcule le score final d'un joueur selon les règles du tournoi.
     /// </summary>
@@ -27,16 +32,16 @@ public class ScoreCalculator
         {
             score += match.Outcome switch
             {
-                MatchResult.Result.Win => 3,
-                MatchResult.Result.Draw => 1,
+                MatchResult.Result.Win => PointsPerWin,
+                MatchResult.Result.Draw => PointsPerDraw,
                 _ => 0
             };
 
             if (match.Outcome == MatchResult.Result.Win)
             {
                 winStreak++;
-                if (winStreak == 3)
-                    score += 5; // bonus de série, accordé une seule fois par série
+                if (winStreak == WinStreakLength)
+                    score += StreakBonus; // accordé une seule fois par série
             }
             else
             {
