@@ -62,7 +62,10 @@ jobs:
           name: coverage-front
           path: frontend/coverage
 
+  # Suspendu
+  # le job repassera a if: true quand l'API sera lancee dans le pipeline.
   e2e:
+    if: false
     runs-on: ubuntu-latest
 
     steps:

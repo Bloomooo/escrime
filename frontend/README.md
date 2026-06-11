@@ -1,42 +1,38 @@
-# sv
+# Arène d'Acier & d'Arcane — frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Front SvelteKit (SPA statique) du tournoi d'escrime fantastique. Les données
+viennent de l'API .NET du dépôt ; aucune règle de score n'est calculée ici.
 
-## Creating a project
+## Démarrer (front + back reliés)
 
-If you're seeing this, you've probably already done this step. Congrats!
+```bash
+# terminal 1 : l'API .NET (SQLite cree automatiquement, CORS ouvert)
+dotnet run --project ../src/Escrime.Api        # http://localhost:5000
 
-```sh
-# create a new project
-npx sv create my-app
+# terminal 2 : le front
+cp .env.example .env                           # PUBLIC_API_BASE=http://localhost:5000
+bun install
+bun run dev                                    # http://localhost:5173
 ```
 
-To recreate this project with the same configuration:
+Build de production : `bun run build` (sortie statique dans `build/`,
+servable par n'importe quel hébergeur statique ; l'API reste à lancer à part).
 
-```sh
-# recreate this project
-bun x sv@0.16.1 create --template minimal --types ts --add prettier eslint vitest="usages:unit,component" playwright tailwindcss="plugins:none" sveltekit-adapter="adapter:static" --no-download-check --install bun frontend
-```
+## Scripts
 
-## Developing
+| Script                              | Rôle                                                            |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `bun run dev`                       | serveur de développement                                        |
+| `bun run build` / `bun run preview` | build statique + aperçu                                         |
+| `bun run check`                     | typecheck svelte-check                                          |
+| `bun run lint` / `bun run format`   | Prettier + ESLint                                               |
+| `bun run test:unit -- --run`        | tests Vitest                                                    |
+| `bun run test:coverage`             | tests + couverture (seuils bloquants)                           |
+| `bun run test:e2e`                  | smoke Playwright (suspendu en CI tant que l'API n'y tourne pas) |
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Écrans
 
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Arène (hero), Combattants (forge, recherche, pénalités, disqualification),
+Duel (animation squelettique, le destin tranche), Reconstitution (rejoue le
+breakdown du score ; fixture de démonstration tant que le endpoint
+`score-breakdown` n'est pas livré côté back), Classement (podium, rangs).
